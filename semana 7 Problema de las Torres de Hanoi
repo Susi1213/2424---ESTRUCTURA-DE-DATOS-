@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+
+namespace PilasApp
+{
+    class TorresDeHanoi
+    {
+        // Función para mover discos entre torres
+        static void MoverDiscos(int n, Stack<int> origen, Stack<int> destino, Stack<int> auxiliar)
+        {
+            if (n == 1)
+            {
+                // Mover disco de la torre origen a la torre destino
+                destino.Push(origen.Pop());
+                MostrarTorres();
+                return;
+            }
+
+            // Mover n-1 discos de la torre origen a la torre auxiliar
+            MoverDiscos(n - 1, origen, auxiliar, destino);
+
+            // Mover disco restante de la torre origen a la torre destino
+            destino.Push(origen.Pop());
+            MostrarTorres();
+
+            // Mover n-1 discos de la torre auxiliar a la torre destino
+            MoverDiscos(n - 1, auxiliar, destino, origen);
+        }
+
+        // Función para mostrar el estado actual de las torres
+        static void MostrarTorres()
+        {
+            Console.WriteLine("Torre A: " + string.Join(", ", torreA));
+            Console.WriteLine("Torre B: " + string.Join(", ", torreB));
+            Console.WriteLine("Torre C: " + string.Join(", ", torreC));
+            Console.WriteLine();
+        }
+
+        static Stack<int> torreA = new Stack<int>();
+        static Stack<int> torreB = new Stack<int>();
+        static Stack<int> torreC = new Stack<int>();
+
+        static void Main(string[] args)
+        {
+            int numDiscos = 4;
+
+            // Inicializar la torre A con discos
+            for (int i = numDiscos; i >= 1; i--)
+            {
+                torreA.Push(i);
+            }
+
+            MostrarTorres();
+
+            // Resolver el problema de las Torres de Hanoi
+            MoverDiscos(numDiscos, torreA, torreC, torreB);
+
+            Console.WriteLine("¡Resuelto!");
+        }
+    }
+}
