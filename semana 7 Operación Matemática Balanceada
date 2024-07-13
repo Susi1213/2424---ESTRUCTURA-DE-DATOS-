@@ -41,7 +41,7 @@ namespace PilasApp
 
         static void Main(string[] args)
         {
-            string expresion = "{7+(8*5)-[(9-7)+(4+1)]}";
+            string expresion = "[(2+3)*{7-2}]/(6+1)";
 
             if (VerificarBalance(expresion))
                 Console.WriteLine("La expresión está balanceada.");
