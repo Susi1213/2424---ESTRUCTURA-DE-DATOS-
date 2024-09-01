@@ -25,10 +25,6 @@ static class Diccionario
             {"World", "mundo"},
             {"Life", "vida"},
             {"Hand", "mano"},
-            {"Part", "parte"},
-            {"Child", "niño/a"},
-            {"Eye", "ojo"},
-            {"Woman", "mujer"},
         };
 
         while (true)
