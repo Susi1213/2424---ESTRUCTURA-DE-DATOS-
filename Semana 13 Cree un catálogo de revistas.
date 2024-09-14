@@ -1,0 +1,117 @@
+using System;
+
+class Node
+{
+    public string title;
+    public Node leftChild, rightChild;
+
+    public Node(string title)
+    {
+        this.title = title;
+        leftChild = rightChild = null;
+    }
+}
+
+class MagazineCatalog
+{
+    private Node root;
+
+    public MagazineCatalog()
+    {
+        root = null;
+    }
+
+    // Función de inserción principal
+    public void Insert(string title)
+    {
+        if (root == null)
+            root = new Node(title);
+        else
+            InsertHelper(root, title);
+    }
+
+    // Función recursiva de inserción
+    private void InsertHelper(Node node, string title)
+    {
+        if (string.Compare(title, node.title, StringComparison.OrdinalIgnoreCase) < 0)
+        {
+            if (node.leftChild == null)
+                node.leftChild = new Node(title);
+            else
+                InsertHelper(node.leftChild, title);
+        }
+        else
+        {
+            if (node.rightChild == null)
+                node.rightChild = new Node(title);
+            else
+                InsertHelper(node.rightChild, title);
+        }
+    }
+
+    // Búsqueda iterativa de un título
+    public bool Search(string title)
+    {
+        Node current = root;
+        while (current != null)
+        {
+            int comparison = string.Compare(title, current.title, StringComparison.OrdinalIgnoreCase);
+            if (comparison == 0)
+                return true; // Título encontrado
+            else if (comparison < 0)
+                current = current.leftChild;
+            else
+                current = current.rightChild;
+        }
+        return false; // Título no encontrado
+    }
+
+    public void DisplayMenu()
+    {
+        Console.WriteLine("Menú del Catálogo de Revistas:");
+        Console.WriteLine("1. Buscar un título");
+        Console.WriteLine("2. Salir");
+    }
+
+    public static void Main(string[] args)
+    {
+        MagazineCatalog catalog = new MagazineCatalog();
+        
+        // Insertar 10 títulos de revistas
+        string[] titles = {
+            "Revista de Tecnología", "Ciencia y Sociedad", "Innovación en el Mundo",
+            "Salud y Bienestar", "Historia Viva", "Avances en Medicina",
+            "Mundo de la Informática", "Educación y Futuro", "Ecología y Naturaleza", "Arte Moderno"
+        };
+
+        foreach (string title in titles)
+        {
+            catalog.Insert(title);
+        }
+
+        // Menú de búsqueda
+        while (true)
+        {
+            catalog.DisplayMenu();
+            Console.Write("Seleccione una opción: ");
+            int option = Convert.ToInt32(Console.ReadLine());
+
+            if (option == 2) break;
+
+            if (option == 1)
+            {
+                Console.Write("Ingrese el título que desea buscar: ");
+                string searchTitle = Console.ReadLine();
+
+                if (catalog.Search(searchTitle))
+                    Console.WriteLine("Encontrado");
+                else
+                    Console.WriteLine("No encontrado");
+            }
+            else
+            {
+                Console.WriteLine("Opción no válida. Intente de nuevo.");
+            }
+        }
+    }
+}
