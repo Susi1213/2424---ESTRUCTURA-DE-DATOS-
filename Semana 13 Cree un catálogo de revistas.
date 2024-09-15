@@ -66,6 +66,22 @@ class MagazineCatalog
         return false; // Título no encontrado
     }
 
+    // Función para recorrer el árbol e imprimir los títulos
+    public void InOrderTraversal()
+    {
+        InOrderHelper(root);
+    }
+
+    private void InOrderHelper(Node node)
+    {
+        if (node != null)
+        {
+            InOrderHelper(node.leftChild);
+            Console.WriteLine(node.title);
+            InOrderHelper(node.rightChild);
+        }
+    }
+
     public void DisplayMenu()
     {
         Console.WriteLine("Menú del Catálogo de Revistas:");
@@ -76,7 +92,7 @@ class MagazineCatalog
     public static void Main(string[] args)
     {
         MagazineCatalog catalog = new MagazineCatalog();
-        
+
         // Insertar 10 títulos de revistas
         string[] titles = {
             "Revista de Tecnología", "Ciencia y Sociedad", "Innovación en el Mundo",
@@ -88,6 +104,10 @@ class MagazineCatalog
         {
             catalog.Insert(title);
         }
+
+        // Imprimir todos los títulos
+        Console.WriteLine("Los títulos en el catálogo son:");
+        catalog.InOrderTraversal();
 
         // Menú de búsqueda
         while (true)
