@@ -1,0 +1,177 @@
+using System;
+
+public class Nodo
+{
+    public int Valor { get; set; }
+    public Nodo? LadoIzquierdo { get; set; }
+    public Nodo? LadoDerecho { get; set; }
+
+    public Nodo(int valor)
+    {
+        Valor = valor;
+        LadoIzquierdo = null;
+        LadoDerecho = null;
+    }
+}
+
+public class ArbolBST
+{
+    public Nodo? raiz;
+
+    public ArbolBST()
+    {
+        raiz = null;
+    }
+
+    public void Insertar(int valor)
+    {
+        raiz = InsertarRecurrente(raiz, valor);
+    }
+
+    private Nodo InsertarRecurrente(Nodo? nodo, int valor)
+    {
+        if (nodo == null)
+        {
+            nodo = new Nodo(valor);
+        }
+        else if (valor < nodo.Valor)
+        {
+            nodo.LadoIzquierdo = InsertarRecurrente(nodo.LadoIzquierdo, valor);
+        }
+        else if (valor > nodo.Valor)
+        {
+            nodo.LadoDerecho = InsertarRecurrente(nodo.LadoDerecho, valor);
+        }
+        return nodo;
+    }
+
+    public void Preorden(Nodo? nodo)
+    {
+        if (nodo != null)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(nodo.Valor + " ");
+            Console.ResetColor();
+            Preorden(nodo.LadoIzquierdo);
+            Preorden(nodo.LadoDerecho);
+        }
+    }
+
+    public void EnOrden(Nodo? nodo)
+    {
+        if (nodo != null)
+        {
+            EnOrden(nodo.LadoIzquierdo);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(nodo.Valor + " ");
+            Console.ResetColor();
+            EnOrden(nodo.LadoDerecho);
+        }
+    }
+
+    public void Postorden(Nodo? nodo)
+    {
+        if (nodo != null)
+        {
+            Postorden(nodo.LadoIzquierdo);
+            Postorden(nodo.LadoDerecho);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(nodo.Valor + " ");
+            Console.ResetColor();
+        }
+    }
+
+    public void Graficar(Nodo? nodo, string espacio = "", bool esLadoDerecho = false)
+    {
+        if (nodo != null)
+        {
+            string prefijo = espacio + (esLadoDerecho ? "├──" : "└──");
+            
+            // Cambiar el color de los nodos según su posición
+            if (esLadoDerecho)
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta; // Nodo derecho
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue; // Nodo izquierdo o raíz
+            }
+
+            Console.WriteLine(prefijo + nodo.Valor);
+            Console.ResetColor();
+
+            Graficar(nodo.LadoIzquierdo, espacio + (esLadoDerecho ? "│   " : "    "), true);
+            Graficar(nodo.LadoDerecho, espacio + (esLadoDerecho ? "│   " : "    "), false);
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        ArbolBST bst = new ArbolBST();
+        bool continuar = true;
+
+        while (continuar)
+        {
+            Console.WriteLine("\n--- Menú de operaciones con Árbol Binario ---");
+            Console.WriteLine("1. Insertar un número en el árbol");
+            Console.WriteLine("2. Mostrar Preorden");
+            Console.WriteLine("3. Mostrar EnOrden");
+            Console.WriteLine("4. Mostrar Postorden");
+            Console.WriteLine("5. Mostrar árbol de manera jerárquica");
+            Console.WriteLine("6. Salir");
+            Console.Write("Seleccione una opción: ");
+            string? opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.Write("Ingrese un número a insertar: ");
+                    if (int.TryParse(Console.ReadLine(), out int valor))
+                    {
+                        bst.Insertar(valor);
+                        Console.WriteLine($"Número '{valor}' insertado correctamente.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número inválido.");
+                    }
+                    break;
+
+                case "2":
+                    Console.WriteLine("Recorrido Preorden:");
+                    bst.Preorden(bst.raiz);
+                    Console.WriteLine();
+                    break;
+
+                case "3":
+                    Console.WriteLine("Recorrido EnOrden:");
+                    bst.EnOrden(bst.raiz);
+                    Console.WriteLine();
+                    break;
+
+                case "4":
+                    Console.WriteLine("Recorrido Postorden:");
+                    bst.Postorden(bst.raiz);
+                    Console.WriteLine();
+                    break;
+
+                case "5":
+                    Console.WriteLine("Árbol Binario de manera jerárquica:");
+                    bst.Graficar(bst.raiz);
+                    Console.WriteLine();
+                    break;
+
+                case "6":
+                    continuar = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Opción no válida. Intente nuevamente.");
+                    break;
+            }
+        }
+    }
+}
